@@ -1,6 +1,4 @@
 <?php include "includes/header.php"?>
-
-	<!-- Navigation -->
 	<nav class="navbar navbar-container navbar-expand-lg navbar-dark fixed-top" id="mainNav">
 		<div class="container">
 			<a class="navbar-brand js-scroll-trigger" href="#page-top">BLOGW</a>
@@ -30,16 +28,10 @@
 		</div>
 	</nav>
 
-<!--==========================
-    INSIDE HERO SECTION Section
-============================-->	
 <section class="page-image page-image-contact md-padding">
     <h1 class="text-white text-center">CONTACT</h1>
 </section>
     
-    <!--==========================
-    Contact Section
-============================-->
 <section id="contact" class="md-padding">
 	<div class="container">
 

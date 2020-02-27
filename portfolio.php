@@ -1,16 +1,11 @@
 <?php include "includes/header.php"?>
 <?php include "includes/header.php"?>
 <?php include "includes/navigation.php"?>
-<!--==========================
-    INSIDE HERO SECTION Section
-============================-->	
+
 <section class="page-image page-image-portfolio md-padding">
     <h1 class="text-white text-center">PORTFOLIO</h1>
 </section>
-    
-<!--==========================
-    PORTFOLIO Section
-============================-->
+
 <section id="portfolio" class="md-padding">
     <div class="container">
 

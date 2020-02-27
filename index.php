@@ -1,10 +1,6 @@
 <?php include "includes/header.php"?>
-	<!-- Navigation -->
-
 <?php include "includes/navigation.php"?>
-	<!--==========================
-    HERO SECTION Section
-============================-->
+
 	<header id="hero">
 		<div class="container">
 			<div class="intro-text">
@@ -15,10 +11,7 @@
 		</div>
 	</header>
 
-	<!--==========================
-    WHO WE ARE Section
-============================-->
-
+ <?php //hakkımızda  ?>
 	<section id="about" class="md-padding">
 		<div class="container">
 			<div class="row text-center">
