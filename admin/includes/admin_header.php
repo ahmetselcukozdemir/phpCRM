@@ -13,16 +13,16 @@
 
     <title>Blog- Admin Panel</title>
 
-    <!-- Bootstrap core CSS-->
+
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom fonts for this template-->
+
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Page level plugin CSS-->
+
     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+
     <link href="css/sb-admin.css" rel="stylesheet">
 
 </head>
@@ -37,7 +37,7 @@
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Navbar Search -->
+    <!--Search -->
     <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 <a class="nav-link" href="#">
     <span>Logout</span>

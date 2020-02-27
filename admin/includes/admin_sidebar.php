@@ -1,5 +1,3 @@
-<!-- Sidebar -->
-
 <ul class="sidebar navbar-nav">
     <li class="nav-item active">
         <a class="nav-link" href="index.php">
@@ -16,6 +14,11 @@
         <a class="nav-link" href="portfolios.php">
             <i class="fas fa-list-ul"></i>
             <span>Portfolio</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="posts.php">
+            <i class="far fa-clipboard"></i>
+            <span>Posts</span></a>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
