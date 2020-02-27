@@ -1,67 +1,122 @@
 <?php include "includes/admin_header.php"; ?>
-
     <div id="wrapper">
-
 <?php include "includes/admin_sidebar.php"; ?>
-
 
     <div id="content-wrapper">
         <div class="container-fluid">
             <hr>
 
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
-                    <th>Post Title</th>
-                    <th>Category</th>
-                    <th>Author</th>
-                    <th>Date</th>
-                    <th>Comments</th>
-                    <th>Image</th>
-                    <th>Text</th>
-                    <th>Tags</th>
-                    <th>Actions</th>
+                    <th>Post Başlığı</th>
+                    <th>Kategori</th>
+                    <th>Yazar</th>
+                    <th>Tarih</th>
+                    <th>Yorum Sayısı</th>
+                    <th>Fotograf</th>
+                    <th>İçerik</th>
+                    <th>Tag</th>
+                    <th>İşlemler</th>
                 </tr>
                 </thead>
                 <tbody>
 
                 <?php
+                     //post ekleme işlemi
+                    if(isset($_POST["add_post"]))
+                    {
+                        $_post_title = $_POST["post_title"];
+                        $_post_category = $_POST["post_category"];
+                        $_post_author = $_POST["post_author"];
+                        $_post_tags = $_POST["post_tags"];
+                        $_post_text = $_POST["post_text"];
+                        $_post_date = date("d-m-y");
+                        $_post_comment_number = 8;
+
+                        $post_image= $_FILES["post_image"]["name"];
+                        $post_image_temp= $_FILES["post_image"]["tmp_name"];
+
+                        move_uploaded_file($post_image_temp,"../img/{$post_image}");
+
+                        $query = "INSERT INTO posts(post_title,post_category,post_author,post_tags,post_text,post_date,post_comment_number,post_image) ";
+                        $query .= "VALUES('{$_post_title}','{$_post_category}','{$_post_author}','{$_post_tags}','{$_post_text}',now(),'{$_post_comment_number}','{$post_image}')";
+                        $create_post_query = mysqli_query($conn,$query);
+                        header("Location: posts.php");
+                    }
+                ?>
+
+                <?php
+                    //post düzenleme/güncelleme
+                    if(isset($_POST["edit_post"]))
+                    {
+                        $post_title = $_POST["post_title"];
+                        $post_category = $_POST["post_category"];
+                        $post_author = $_POST["post_author"];
+                        $post_tags = $_POST["post_tags"];
+                        $post_text = $_POST["post_text"];
+
+                        $post_image= $_FILES["post_image"]["name"];
+                        $post_image_temp= $_FILES["post_image"]["tmp_name"];
+                        move_uploaded_file($post_image_temp,"../img/{$post_image}");
+
+                        //post düzenlerken eğer fotograf alanı boş/deger girilmedi ise ;
+                        if(empty($post_image))
+                        {
+                            $query2 = "SELECT *FROM post WHERE post_id= '$_POST[post_id]'";
+                            $select_image = mysqli_query($conn, $query2);
+                            while($row = mysqli_fetch_array($select_image))
+                            {
+                                $post_image = $row["post_image"];
+                            }
+                        }
+
+                        $sql_query2 = "UPDATE post SET post_title='$post_title',post_category=
+                        '$post_category',post_author='$post_author',post_tags='$post_tags',post_text'$post_text',post_image='{$post_image}'WHERE 
+                        post_id='$_POST[post_id]'";
+                        $edit_post_query = mysqli_query($conn,$sql_query2);
+                        header("Location: posts.php");
+                    }
+                ?>
+
+                <?php
                     $sql_query= "SELECT *FROM posts ORDER BY post_id DESC";
                     $select_all_posts= mysqli_query($conn,$sql_query);
+                    $k = 1;
                     while($row = mysqli_fetch_assoc($select_all_posts))
                     {
                         $post_id =  $row["post_id"];
                         $post_title =  $row["post_title"];
-                        $post_category_id =  $row["post_category_id"];
+                        $post_category =  $row["post_category"];
                         $post_author =  $row["post_author"];
                         $post_date =  $row["post_date"];
                         $post_comment_number =  $row["post_comment_number"];
-                        $post_comment_image =  $row["post_comment_image"];
-                        $post_text =  $row["post_text"];
+                        $post_image =  $row["post_comment_image"];
+                        $post_text =  substr($row["post_text"],0,100);
                         $post_tags =  $row["post_tags"];
                         echo "
                           <tr>
                             <td>$post_id </td>
                             <td>$post_title</td>
-                            <td>$post_category_id</td>
+                            <td>$post_category</td>
                             <td>$post_author </td>
                             <td>$post_date</td>
                             <td>$post_comment_number </td>
-                            <td>$post_comment_image</td>
-                            <td>$post_text</td>
+                          <td><img src='../img/$post_image' height='100px' width='100px'  ></td>
+                            <td>$post_text...</td>
                             <td>$post_tags</td>
                             <td>
                                 <div class='dropdown'>
                                     <button class='btn btn-primary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                                        Actions
+                                        İşlemler
                                     </button>
                                     <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                                        <a class='dropdown-item' data-toggle='modal' data-target='#edit_modal' href='#'>Edit</a>
+                                        <a class='dropdown-item' data-toggle='modal' data-target='#edit_modal$k' href='#'>Düzenle</a>
                                         <div class='dropdown-divider'></div>
-                                        <a class='dropdown-item' href='#'>Delete</a>
+                                          <a class='dropdown-item' href='posts.php?delete={$post_id}'>Sil</a>
                                         <div class='dropdown-divider'></div>
-                                        <a class='dropdown-item' data-toggle='modal' data-target='#add_modal'>Add</a>
+                                        <a class='dropdown-item' data-toggle='modal' data-target='#add_modal'>Ekle</a>
                                     </div>
                                 </div>
                             </td>
@@ -70,7 +125,7 @@
                 ?>
 
 
-                <div id="edit_modal" class="modal fade">
+                <div id="edit_modal<?php echo $k; ?>" class="modal fade">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -80,43 +135,64 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="post">
+                                <form action="" method="post" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <label for="post_title">Post Title</label>
-                                        <input type="text" class="form-control" name="post_title">
+                                        <label for="post_title" >Post Başlık</label>
+                                        <input type="text" class="form-control" name="post_title" value="<?php echo $post_title;?>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="post_category">Post Category</label>
-                                        <input type="text" class="form-control" name="post_category">
+                                        <label for="post_category">Post Kategori</label>
+                                        <select class="form-control" name="post_category">
+                                            <?php
+                                            $edit_category_sql="SELECT *FROM categories";
+                                            $edit_category_run=mysqli_query($conn,$edit_category_sql);
+                                            while ($edit_category_row = mysqli_fetch_assoc($edit_category_run))
+                                            {
+                                                $category_name= $edit_category_row["category_name"];
+                                                //düzenlenme işleminde seçili kategoriyi getirme
+                                                if($edit_category_row["category_name"] == $row["post_category"])
+                                                {
+                                                    echo "<option selected>$category_name</option>";
+                                                }
+                                                else
+                                                {
+                                                    echo "<option>$category_name</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="post_author">Post Author</label>
-                                        <input type="text" class="form-control" name="post_author">
+                                        <label for="post_author">Post Yazar</label>
+                                        <input type="text" class="form-control" name="post_author" value="<?php echo $post_author;?>">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="post_image">Post Image</label>
+                                        <label for="post_image">Post Fotograf</label>
+                                        <img src="../img/<?php echo $post_image; ?>" height="100px" width="100px">
                                         <input type="file" class="form-control" name="post_image">
                                     </div>
                                     <div class="form-group">
-                                        <label for="post_tags">Post Tags</label>
-                                        <input type="text" class="form-control" name="post_tags">
+                                        <label for="post_tags">Post Tag</label>
+                                        <input type="text" class="form-control" name="post_tags" value="<?php echo $post_tags;?>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="post_text">Post Text</label>
-                                        <textarea class="form-control" name="post_text" id="" cols="20" rows="5"></textarea>
+                                        <label for="post_text">Post İçerik</label>
+                                        <textarea class="form-control" name="post_text" id="" cols="20" rows="5">
+                                            <?php echo $row["post_text"]; ?>
+                                        </textarea>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="hidden" name="post_id" value="">
-                                        <input type="submit" class="btn btn-primary" name="edit_post" value="Edit Post">
+                                        <input type="hidden" name="post_id" value="<?php echo $row["post_id"];?>">
+                                        <input type="submit" class="btn btn-primary" name="edit_post" value="Güncelle">
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <?php } ?>
+                <?php $k++; } ?>
                 </tbody>
             </table>
 
@@ -130,36 +206,36 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="" method="post">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label for="post_title">Post Title</label>
+                                    <label for="post_title">Post Başlık</label>
                                     <input type="text" class="form-control" name="post_title">
                                 </div>
                                 <div class="form-group">
-                                    <label for="post_category">Post Category</label>
+                                    <label for="post_category">Post Kategori</label>
                                     <input type="text" class="form-control" name="post_category">
                                 </div>
                                 <div class="form-group">
-                                    <label for="post_author">Post Author</label>
+                                    <label for="post_author">Post Yazar</label>
                                     <input type="text" class="form-control" name="post_author">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="post_image">Post Image</label>
+                                    <label for="post_image">Post Fotograf</label>
                                     <input type="file" class="form-control" name="post_image">
                                 </div>
                                 <div class="form-group">
-                                    <label for="post_tags">Post Tags</label>
+                                    <label for="post_tags">Post Tag</label>
                                     <input type="text" class="form-control" name="post_tags">
                                 </div>
                                 <div class="form-group">
-                                    <label for="post_text">Post Text</label>
+                                    <label for="post_text">Post İçerik</label>
                                     <textarea class="form-control" name="post_text" id="" cols="20" rows="5"></textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <input type="hidden" name="post_id" value="">
-                                    <input type="submit" class="btn btn-primary" name="add_post" value="Add Post">
+                                    <input type="submit" class="btn btn-primary" name="add_post" value="Ekle">
                                 </div>
                             </form>
                         </div>
@@ -167,6 +243,16 @@
                 </div>
             </div>
 
+        <?php
+        // post silme işlemi
+        if(isset($_GET["delete"]))
+        {
+            $delete_post_id = $_GET["delete"];
+            $query="DELETE FROM posts WHERE post_id= {$delete_post_id}";
+            $delete_portfolio_query= mysqli_query($conn,$query);
+            header("Location: posts.php");
+        }
 
+        ?>
 
 <?php include "includes/admin_footer.php"; ?>
