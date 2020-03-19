@@ -1,4 +1,3 @@
-
 <footer>
     <div class="container">
         <div class="row">
@@ -12,7 +11,7 @@
                     <li><a href="#"><i class="fab fa-youtube"></i></a></li>
                 </ul>
                 <div class="footer-copyrights">
-                    <p class="text-white">NO COPYRIGHT ARIN YAZILIM</p>
+                    <p class="text-white">coded with <strong>love.</strong></p>
                 </div>
             </div>
         </div>
